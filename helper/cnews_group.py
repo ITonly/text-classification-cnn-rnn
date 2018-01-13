@@ -21,7 +21,7 @@ def save_file(dirname):
     f_train = open('data/cnews/cnews.train.txt', 'w', encoding='utf-8')
     f_test = open('data/cnews/cnews.test.txt', 'w', encoding='utf-8')
     f_val = open('data/cnews/cnews.val.txt', 'w', encoding='utf-8')
-    for category in os.listdir(dirname):   # 分类目录
+    for category in os.listdir(dirname):   # 分类目录 返回指定路径下的文件和文件夹列表。
         cat_dir = os.path.join(dirname, category)
         if not os.path.isdir(cat_dir):
             continue

@@ -15,6 +15,7 @@ train_dir = os.path.join(base_dir, 'cnews.train.txt')
 test_dir = os.path.join(base_dir, 'cnews.test.txt')
 val_dir = os.path.join(base_dir, 'cnews.val.txt')
 vocab_dir = os.path.join(base_dir, 'cnews.vocab.txt')
+times_dir = os.path.join(base_dir, 'cnews.times.txt')
 
 save_dir = 'checkpoints/textcnn'
 save_path = os.path.join(save_dir, 'best_validation')   # 最佳验证结果保存路径
@@ -67,6 +68,7 @@ def train():
 
     print("Loading training and validation data...")
     # 载入训练集与验证集
+
     start_time = time.time()
     x_train, y_train = process_file(train_dir, word_to_id, cat_to_id, config.seq_length)
     x_val, y_val = process_file(val_dir, word_to_id, cat_to_id, config.seq_length)
@@ -116,7 +118,10 @@ def train():
                 msg = 'Iter: {0:>6}, Train Loss: {1:>6.2}, Train Acc: {2:>7.2%},'\
                     + ' Val Loss: {3:>6.2}, Val Acc: {4:>7.2%}, Time: {5} {6}'
                 print(msg.format(total_batch, loss_train, acc_train, loss_val, acc_val, time_dif, improved_str))
+                gmp, fc1, fc2, fc3,logits,y_pred_cls = session.run([model.gmp, model.fc1, model.fc2, model.fc3, model.logits,model.y_pred_cls], feed_dict=feed_dict)  # 运行优化
+                lin = map(sum, logits)
 
+            # o = session.run(model.optim, feed_dict=feed_dict)  # 运行优化
             session.run(model.optim, feed_dict=feed_dict)  # 运行优化
             total_batch += 1
 
@@ -178,7 +183,7 @@ if __name__ == '__main__':
     print('Configuring CNN model...')
     config = TCNNConfig()
     if not os.path.exists(vocab_dir):  # 如果不存在词汇表，重建
-        build_vocab(train_dir, vocab_dir, config.vocab_size)
+        build_vocab(train_dir, vocab_dir, times_dir, config.vocab_size)
     categories, cat_to_id = read_category()
     words, word_to_id = read_vocab(vocab_dir)
     config.vocab_size = len(words)

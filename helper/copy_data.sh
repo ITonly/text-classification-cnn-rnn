@@ -11,6 +11,7 @@ for category in $( ls THUCNews); do
   newdir=data/thucnews/$category
   if [ -d $newdir ]; then
     rm -rf $newdir
+  else
     mkdir $newdir
   fi
 

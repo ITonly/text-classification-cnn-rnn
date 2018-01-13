@@ -26,7 +26,7 @@ def read_file(filename):
                 pass
     return contents, labels
 
-def build_vocab(train_dir, vocab_dir, vocab_size=5000):
+def build_vocab(train_dir, vocab_dir, times_dir,vocab_size=5000):
     """根据训练集构建词汇表，存储"""
     data_train, _ = read_file(train_dir)
 
@@ -35,13 +35,22 @@ def build_vocab(train_dir, vocab_dir, vocab_size=5000):
         all_data.extend(content)
 
     counter = Counter(all_data)
-    count_pairs = counter.most_common(vocab_size - 1)
+    count_pairs = counter.most_common()  # 返回一个TopN列表c.most_common(3)  [('a', 5), ('r', 2), ('b', 2)]
+    s0 = count_pairs[4998]
+    s = count_pairs[4999]
+    s1 = count_pairs[5000]
+    s2 = count_pairs[5001]
+    s2 = count_pairs[5002]
+    s3 = count_pairs[5003]
     words, _ = list(zip(*count_pairs))
     # 添加一个 <PAD> 来将所有文本pad为同一长度
     words = ['<PAD>'] + list(words)
+    _ = ['<PAD>'] + list(str(x) for x in _)
+
+    # print('找数据规律',count_pairs[4999],count_pairs[5000],count_pairs[5001],count_pairs[5002],count_pairs[5003],count_pairs[5004])
 
     open_file(vocab_dir, mode='w').write('\n'.join(words) + '\n')
-
+    # open_file(times_dir, mode='w').write('\n'.join(_) + '\n')
 def read_vocab(vocab_dir):
     """读取词汇表"""
     words = open_file(vocab_dir).read().strip().split('\n')

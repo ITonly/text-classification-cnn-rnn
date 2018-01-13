@@ -13,7 +13,7 @@ class TCNNConfig(object):
     kernel_size = 5         # 卷积核尺寸
     vocab_size = 5000       # 词汇表达小
 
-    hidden_dim = 128        # 全连接层神经元
+    hidden_dim = 128       # 全连接层神经元
 
     dropout_keep_prob = 0.5 # dropout保留比例
     learning_rate = 1e-3    # 学习率
@@ -48,13 +48,18 @@ class TextCNN(object):
             # CNN layer
             conv = tf.layers.conv1d(embedding_inputs, self.config.num_filters, self.config.kernel_size, name='conv')
             # global max pooling layer
+            # gmp = tf.reduce_max(conv, reduction_indices=[1], name='gmp')
             gmp = tf.reduce_max(conv, reduction_indices=[1], name='gmp')
+            self.gmp = gmp
 
         with tf.name_scope("score"):
             # 全连接层，后面接dropout以及relu激活
             fc = tf.layers.dense(gmp, self.config.hidden_dim, name='fc1')
+            self.fc1 = fc
             fc = tf.contrib.layers.dropout(fc, self.keep_prob)
+            self.fc2 = fc
             fc = tf.nn.relu(fc)
+            self.fc3 = fc
 
             # 分类器
             self.logits = tf.layers.dense(fc, self.config.num_classes, name='fc2')
