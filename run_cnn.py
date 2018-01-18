@@ -139,8 +139,8 @@ def train():
 
 def test():
     print("Loading test data...")
-    start_time = time.time()
-    x_test, y_test = process_file(test_dir, word_to_id, cat_to_id, 'padding',word2vec_dir)
+    process_filestart_time = time.time()
+    x_test, y_test = process_file(test_dir, word_to_id, cat_to_id, 'padding', word2vec_dir)
 
     session = tf.Session()
     session.run(tf.global_variables_initializer())
