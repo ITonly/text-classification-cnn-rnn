@@ -139,7 +139,7 @@ def train():
 
 def test():
     print("Loading test data...")
-    process_filestart_time = time.time()
+    start_time = time.time()
     x_test, y_test = process_file(test_dir, word_to_id, cat_to_id, 'padding', word2vec_dir)
 
     session = tf.Session()
@@ -175,7 +175,6 @@ def test():
     print("Confusion Matrix...")
     cm = metrics.confusion_matrix(y_test_cls, y_pred_cls)
     print(cm)
-
     time_dif = get_time_dif(start_time)
     print("Time usage:", time_dif)
 
