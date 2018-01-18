@@ -16,6 +16,7 @@ test_dir = os.path.join(base_dir, 'cnews.test.txt')
 val_dir = os.path.join(base_dir, 'cnews.val.txt')
 vocab_dir = os.path.join(base_dir, 'cnews.vocab.txt')
 times_dir = os.path.join(base_dir, 'cnews.times.txt')
+word2vec_dir = os.path.join(base_dir,'news_12g_baidubaike_20g_novel_90g_embedding_64.bin')
 
 save_dir = 'checkpoints/textcnn'
 save_path = os.path.join(save_dir, 'best_validation')   # 最佳验证结果保存路径
@@ -70,10 +71,13 @@ def train():
     # 载入训练集与验证集
 
     start_time = time.time()
-    x_train, y_train = process_file(train_dir, word_to_id, cat_to_id, config.seq_length)
-    x_val, y_val = process_file(val_dir, word_to_id, cat_to_id, config.seq_length)
+    x_train, y_train = process_file(train_dir, word_to_id, cat_to_id,'padding',word2vec_dir)
+    x_val, y_val = process_file(val_dir, word_to_id, cat_to_id,'padding',word2vec_dir)
+    config.seq_length = x_train.shape[1]
     time_dif = get_time_dif(start_time)
     print("Time usage:", time_dif)
+    # model = TextCNN(config)
+
 
     # 创建session
     session = tf.Session()
@@ -136,7 +140,7 @@ def train():
 def test():
     print("Loading test data...")
     start_time = time.time()
-    x_test, y_test = process_file(test_dir, word_to_id, cat_to_id, config.seq_length)
+    x_test, y_test = process_file(test_dir, word_to_id, cat_to_id, 'padding',word2vec_dir)
 
     session = tf.Session()
     session.run(tf.global_variables_initializer())

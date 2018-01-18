@@ -5,6 +5,9 @@ from collections import Counter
 import tensorflow.contrib.keras as kr
 import numpy as np
 import os
+import jieba
+from gensim.models.keyedvectors import KeyedVectors
+
 
 def open_file(filename, mode='r'):
     """
@@ -20,8 +23,11 @@ def read_file(filename):
         for line in f:
             try:
                 label, content = line.strip().split('\t')
-                contents.append(list(content))
-                labels.append(label)
+                # contents.append(list(content))
+                # labels.append(label)
+                # 把这里替换成分词的
+                contents.append(list(jieba.cut(line, cut_all=False)))
+
             except:
                 pass
     return contents, labels
@@ -66,24 +72,53 @@ def read_category():
 
     return categories, cat_to_id
 
+
 def to_words(content, words):
     """将id表示的内容转换为文字"""
     return ''.join(words[x] for x in content)
 
-def process_file(filename, word_to_id, cat_to_id, max_length=600):
+
+def process_file(filename, word_to_id, cat_to_id, padding_token, max_length=None, file_to_load=None):
     """将文件转换为id表示"""
     contents, labels = read_file(filename)
 
     data_id, label_id = [], []
+    max_sentence_length = max_length if max_length is not None else max([len(sentence) for sentence in contents])
+    for sentence in contents:
+        if len(sentence) > max_sentence_length:
+            sentence = sentence[:max_sentence_length]
+        else:
+            sentence.extend([padding_token] * (max_sentence_length - len(sentence)))
     for i in range(len(contents)):
-        data_id.append([word_to_id[x] for x in contents[i] if x in word_to_id])
+        # data_id.append([word_to_id[x] for x in contents[i] if x in word_to_id])
+        # 处理成word2vec形式
+        data_id = embedding_sentences(contents, file_to_load)
         label_id.append(cat_to_id[labels[i]])
 
     # 使用keras提供的pad_sequences来将文本pad为固定长度
-    x_pad = kr.preprocessing.sequence.pad_sequences(data_id, max_length)
+    # x_pad = kr.preprocessing.sequence.pad_sequences(data_id, max_length)
     y_pad = kr.utils.to_categorical(label_id)  # 将标签转换为one-hot表示
 
-    return x_pad, y_pad
+    return data_id, y_pad
+
+
+def embedding_sentences(sentences, file_to_load = None):
+    if file_to_load is not None:
+         w2vModel = KeyedVectors.load_word2vec_format(file_to_load,binary=True)
+        # w2vModel = Word2Vec.load(file_to_load)
+
+    all_vectors = []
+    embeddingDim = w2vModel.vector_size
+    embeddingUnknown = [0 for i in range(embeddingDim)]
+    for sentence in sentences:
+        this_vector = []
+        for word in sentence:
+            if word in w2vModel.wv.vocab:
+                this_vector.append(w2vModel[word])
+            else:
+                this_vector.append(embeddingUnknown)
+        all_vectors.append(this_vector)
+    return all_vectors
 
 def batch_iter(x, y, batch_size=64):
     """生成批次数据"""
