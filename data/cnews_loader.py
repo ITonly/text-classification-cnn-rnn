@@ -26,7 +26,7 @@ def read_file(filename):
                 # contents.append(list(content))
                 # labels.append(label)
                 # 把这里替换成分词的
-                contents.append(list(jieba.cut(line, cut_all=False)))
+                contents.append(list(jieba.cut(content, cut_all=False)))
 
             except:
                 pass
@@ -66,8 +66,10 @@ def read_vocab(vocab_dir):
 
 def read_category():
     """读取分类目录，固定"""
-    categories = ['体育', '财经', '房产', '家居',
-        '教育', '科技', '时尚', '时政', '游戏', '娱乐']
+    categories = ['体育', '财经', '彩票', '星座', '社会', '股票', '房产', '家居',
+                  '教育', '科技', '时尚', '时政', '游戏', '娱乐']
+    # categories = ['体育', '财经', '房产', '家居',
+    #     '教育', '科技', '时尚', '时政', '游戏', '娱乐']
     cat_to_id = dict(zip(categories, range(len(categories))))
 
     return categories, cat_to_id
@@ -114,7 +116,7 @@ def embedding_sentences(sentences, file_to_load = None):
         this_vector = []
         for word in sentence:
             if word in w2vModel.wv.vocab:
-                this_vector.append(w2vModel[word])
+                 this_vector.append(w2vModel[word])
             else:
                 this_vector.append(embeddingUnknown)
         all_vectors.append(this_vector)
