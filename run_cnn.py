@@ -16,7 +16,7 @@ test_dir = os.path.join(base_dir, 'cnews.test.txt')
 val_dir = os.path.join(base_dir, 'cnews.val.txt')
 vocab_dir = os.path.join(base_dir, 'cnews.vocab.txt')
 times_dir = os.path.join(base_dir, 'cnews.times.txt')
-word2vec_dir = os.path.join(base_dir,'news_12g_baidubaike_20g_novel_90g_embedding_64.bin')
+word2vec_dir =os.path.join(base_dir,'news_12g_baidubaike_20g_novel_90g_embedding_64.bin')
 
 save_dir = 'checkpoints/textcnn'
 save_path = os.path.join(save_dir, 'best_validation')   # 最佳验证结果保存路径
@@ -71,9 +71,10 @@ def train():
     # 载入训练集与验证集
 
     start_time = time.time()
-    x_train, y_train = process_file(train_dir, word_to_id, cat_to_id,'padding',word2vec_dir)
-    x_val, y_val = process_file(val_dir, word_to_id, cat_to_id,'padding',word2vec_dir)
-    config.seq_length = x_train.shape[1]
+    x_train, y_train = process_file(train_dir, word_to_id, cat_to_id,'padding', word2vec_dir, config.seq_length)
+    x_val, y_val = process_file(val_dir, word_to_id, cat_to_id,'padding', word2vec_dir, config.seq_length)
+    # config.seq_length = x_train.shape[1]
+    # model = TextCNN(config)
     time_dif = get_time_dif(start_time)
     print("Time usage:", time_dif)
     # model = TextCNN(config)
@@ -122,8 +123,8 @@ def train():
                 msg = 'Iter: {0:>6}, Train Loss: {1:>6.2}, Train Acc: {2:>7.2%},'\
                     + ' Val Loss: {3:>6.2}, Val Acc: {4:>7.2%}, Time: {5} {6}'
                 print(msg.format(total_batch, loss_train, acc_train, loss_val, acc_val, time_dif, improved_str))
-                gmp, fc1, fc2, fc3,logits,y_pred_cls = session.run([model.gmp, model.fc1, model.fc2, model.fc3, model.logits,model.y_pred_cls], feed_dict=feed_dict)  # 运行优化
-                lin = map(sum, logits)
+                # gmp, fc1, fc2, fc3,logits,y_pred_cls = session.run([model.gmp, model.fc1, model.fc2, model.fc3, model.logits,model.y_pred_cls], feed_dict=feed_dict)  # 运行优化
+                # lin = map(sum, logits)
 
             # o = session.run(model.optim, feed_dict=feed_dict)  # 运行优化
             session.run(model.optim, feed_dict=feed_dict)  # 运行优化
@@ -140,7 +141,7 @@ def train():
 def test():
     print("Loading test data...")
     start_time = time.time()
-    x_test, y_test = process_file(test_dir, word_to_id, cat_to_id, 'padding', word2vec_dir)
+    x_test, y_test = process_file(test_dir, word_to_id, cat_to_id, 'padding', word2vec_dir, config.seq_length)
 
     session = tf.Session()
     session.run(tf.global_variables_initializer())

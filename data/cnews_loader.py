@@ -24,7 +24,7 @@ def read_file(filename):
             try:
                 label, content = line.strip().split('\t')
                 # contents.append(list(content))
-                # labels.append(label)
+                labels.append(label)
                 # 把这里替换成分词的
                 contents.append(list(jieba.cut(content, cut_all=False)))
 
@@ -80,7 +80,7 @@ def to_words(content, words):
     return ''.join(words[x] for x in content)
 
 # process_file(test_dir, word_to_id, cat_to_id, 'padding', word2vec_dir)
-def process_file(filename, word_to_id, cat_to_id, padding_token, file_to_load=None, max_length=None,):
+def process_file(filename, word_to_id, cat_to_id, padding_token, file_to_load=None, max_length=None):
     """将文件转换为id表示"""
     contents, labels = read_file(filename)
 
@@ -88,18 +88,21 @@ def process_file(filename, word_to_id, cat_to_id, padding_token, file_to_load=No
     max_sentence_length = max_length if max_length is not None else max([len(sentence) for sentence in contents])
     for sentence in contents:
         if len(sentence) > max_sentence_length:
-            sentence = sentence[:max_sentence_length]
+            # sentence = sentence[:max_sentence_length]
+            del sentence[max_sentence_length:]
+
         else:
             sentence.extend([padding_token] * (max_sentence_length - len(sentence)))
     for i in range(len(contents)):
         # data_id.append([word_to_id[x] for x in contents[i] if x in word_to_id])
         # 处理成word2vec形式
-        data_id = embedding_sentences(contents, file_to_load)
         label_id.append(cat_to_id[labels[i]])
+
+    data_id = embedding_sentences(contents, file_to_load)
 
     # 使用keras提供的pad_sequences来将文本pad为固定长度
     # x_pad = kr.preprocessing.sequence.pad_sequences(data_id, max_length)
-    y_pad = kr.utils.to_categorical(label_id)  # 将标签转换为one-hot表示
+    y_pad = kr.utils.to_categorical(label_id) # 将标签转换为one-hot表示
 
     return data_id, y_pad
 
@@ -126,7 +129,7 @@ def batch_iter(x, y, batch_size=64):
     """生成批次数据"""
     data_len = len(x)
     num_batch = int((data_len - 1) / batch_size) + 1
-
+    x = np.array(x)
     indices = np.random.permutation(np.arange(data_len))
     x_shuffle = x[indices]
     y_shuffle = y[indices]

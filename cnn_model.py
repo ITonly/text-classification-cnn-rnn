@@ -7,7 +7,7 @@ class TCNNConfig(object):
     """CNN配置参数"""
 
     embedding_dim = 64      # 词向量维度
-    seq_length = 600        # 序列长度
+    seq_length = 600       # 序列长度
     num_classes = 10        # 类别数
     num_filters = 256        # 卷积核数目
     kernel_size = 5         # 卷积核尺寸
@@ -32,7 +32,7 @@ class TextCNN(object):
 
         # 三个待输入的数据
         self.input_x = tf.placeholder(tf.float32, [None, self.config.seq_length, self.config.embedding_dim], name='input_x')
-        self.input_y = tf.placeholder(tf.float32, [None, self.config.num_classes], name='input_y')
+        self.input_y = tf.placeholder(tf.float32, [None, 14], name='input_y')
         self.keep_prob = tf.placeholder(tf.float32, name='keep_prob')
 
         self.cnn()
