@@ -6,6 +6,7 @@ import tensorflow.contrib.keras as kr
 import numpy as np
 import os
 import jieba
+import jieba.analyse
 from gensim.models.keyedvectors import KeyedVectors
 
 
@@ -26,7 +27,9 @@ def read_file(filename):
                 # contents.append(list(content))
                 labels.append(label)
                 # 把这里替换成分词的
-                contents.append(list(jieba.cut(content, cut_all=False)))
+                temp=jieba.analyse.extract_tags(line, topK=600, withWeight=False, allowPOS=())
+                temp.extend(['padding'] * (600 - len(temp))) if len(temp) < 600 else None
+                contents.append(temp)
 
             except:
                 pass
@@ -85,14 +88,14 @@ def process_file(filename, word_to_id, cat_to_id, padding_token, file_to_load=No
     contents, labels = read_file(filename)
 
     data_id, label_id = [], []
-    max_sentence_length = max_length if max_length is not None else max([len(sentence) for sentence in contents])
-    for sentence in contents:
-        if len(sentence) > max_sentence_length:
-            # sentence = sentence[:max_sentence_length]
-            del sentence[max_sentence_length:]
-
-        else:
-            sentence.extend([padding_token] * (max_sentence_length - len(sentence)))
+    # max_sentence_length = max_length if max_length is not None else max([len(sentence) for sentence in contents])
+    # for sentence in contents:
+    #     if len(sentence) > max_sentence_length:
+    #         # sentence = sentence[:max_sentence_length]
+    #         del sentence[max_sentence_length:]
+    #
+    #     else:
+    #         sentence.extend([padding_token] * (max_sentence_length - len(sentence)))
     for i in range(len(contents)):
         # data_id.append([word_to_id[x] for x in contents[i] if x in word_to_id])
         # 处理成word2vec形式
