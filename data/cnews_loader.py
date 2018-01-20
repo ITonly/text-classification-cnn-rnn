@@ -87,6 +87,7 @@ def process_file(filename, word_to_id, cat_to_id, padding_token, file_to_load=No
 
     data_id, label_id = [], []
     max_sentence_length = max_length if max_length is not None else max([len(sentence) for sentence in contents])
+    print('max_sentence_length',max_sentence_length)
     for sentence in contents:
         if len(sentence) > max_sentence_length:
             # sentence = sentence[:max_sentence_length]
