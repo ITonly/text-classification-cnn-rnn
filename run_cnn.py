@@ -71,8 +71,8 @@ def train():
     # 载入训练集与验证集
 
     start_time = time.time()
-    x_train, y_train = process_file(train_dir, word_to_id, cat_to_id,'padding', word2vec_dir, config.seq_length)
-    x_val, y_val = process_file(val_dir, word_to_id, cat_to_id,'padding', word2vec_dir, config.seq_length)
+    x_train, y_train = process_file(train_dir, word_to_id, cat_to_id,'padding', word2vec_dir)
+    x_val, y_val = process_file(val_dir, word_to_id, cat_to_id,'padding', word2vec_dir)
     # config.seq_length = x_train.shape[1]
     # model = TextCNN(config)
     time_dif = get_time_dif(start_time)
@@ -141,7 +141,7 @@ def train():
 def test():
     print("Loading test data...")
     start_time = time.time()
-    x_test, y_test = process_file(test_dir, word_to_id, cat_to_id, 'padding', word2vec_dir, config.seq_length)
+    x_test, y_test = process_file(test_dir, word_to_id, cat_to_id, 'padding', word2vec_dir)
 
     session = tf.Session()
     session.run(tf.global_variables_initializer())
