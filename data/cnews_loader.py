@@ -69,10 +69,10 @@ def read_vocab(vocab_dir):
 
 def read_category():
     """读取分类目录，固定"""
-    categories = ['体育', '财经', '彩票', '星座', '社会', '股票', '房产', '家居',
-                  '教育', '科技', '时尚', '时政', '游戏', '娱乐']
-    # categories = ['体育', '财经', '房产', '家居',
-    #     '教育', '科技', '时尚', '时政', '游戏', '娱乐']
+    # categories = ['体育', '财经', '彩票', '星座', '社会', '股票', '房产', '家居',
+    #               '教育', '科技', '时尚', '时政', '游戏', '娱乐']
+    categories = ['体育', '财经', '房产', '家居',
+        '教育', '科技', '时尚', '时政', '游戏', '娱乐']
     cat_to_id = dict(zip(categories, range(len(categories))))
 
     return categories, cat_to_id
@@ -81,6 +81,7 @@ def read_category():
 def to_words(content, words):
     """将id表示的内容转换为文字"""
     return ''.join(words[x] for x in content)
+
 
 # process_file(test_dir, word_to_id, cat_to_id, 'padding', word2vec_dir)
 def process_file(filename, word_to_id, cat_to_id, padding_token, file_to_load=None, max_length=None):
