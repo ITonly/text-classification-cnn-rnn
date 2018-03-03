@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+# encoding: UTF-8
 
 from cnn_model import *
 from data.cnews_loader import *

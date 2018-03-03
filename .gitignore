@@ -7,3 +7,7 @@ cnn_keras.py
 *.pyc
 checkpoints
 tensorboard
+helper/news_12g_baidubaike_20g_novel_90g_embedding_64.bin
+venv
+vec
+test.sh
