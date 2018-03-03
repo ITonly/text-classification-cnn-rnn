@@ -85,7 +85,7 @@ def to_words(content, words):
 
 
 # process_file(test_dir, word_to_id, cat_to_id, 'padding', word2vec_dir)
-def process_file(filename, word_to_id, cat_to_id, padding_token, file_to_load=None, max_length=None):
+def process_file(filename, cat_to_id, padding_token, file_to_load=None, max_length=None):
     """将文件转换为id表示"""
     contents, labels = read_file(filename)
 
