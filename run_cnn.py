@@ -51,7 +51,7 @@ def evaluate(sess, x_, y_):
     return total_loss / data_len, total_acc / data_len
 
 def train():
-    print("Configuring TensorBoard and Saver...")
+    print("Configuring TensorBoard and Saver test...")
     # 配置 Tensorboard，重新训练时，请将tensorboard文件夹删除，不然图会覆盖
     tensorboard_dir = 'tensorboard/textcnn'
     if not os.path.exists(tensorboard_dir):
@@ -71,8 +71,10 @@ def train():
     # 载入训练集与验证集
 
     start_time = time.time()
-    x_train, y_train = process_file(train_dir, word_to_id, cat_to_id,'padding', word2vec_dir)
-    x_val, y_val = process_file(val_dir, word_to_id, cat_to_id,'padding', word2vec_dir)
+    # x_train, y_train = process_file(train_dir, word_to_id, cat_to_id,'padding', word2vec_dir)
+    # x_val, y_val = process_file(val_dir, word_to_id, cat_to_id,'padding', word2vec_dir)
+    x_train, y_train = process_file(train_dir, cat_to_id, 'padding', word2vec_dir)
+    x_val, y_val = process_file(val_dir, cat_to_id, 'padding', word2vec_dir)
     # config.seq_length = x_train.shape[1]
     # model = TextCNN(config)
     time_dif = get_time_dif(start_time)
@@ -139,9 +141,10 @@ def train():
             break
 
 def test():
-    print("Loading test data...")
+    print("Loading test data2...")
     start_time = time.time()
-    x_test, y_test = process_file(test_dir, word_to_id, cat_to_id, 'padding', word2vec_dir)
+    # x_test, y_test = process_file(test_dir, word_to_id, cat_to_id, 'padding', word2vec_dir)
+    x_test, y_test = process_file(test_dir, cat_to_id, 'padding', word2vec_dir)
 
     session = tf.Session()
     session.run(tf.global_variables_initializer())
@@ -189,8 +192,8 @@ if __name__ == '__main__':
     if not os.path.exists(vocab_dir):  # 如果不存在词汇表，重建
         build_vocab(train_dir, vocab_dir, times_dir, config.vocab_size)
     categories, cat_to_id = read_category()
-    words, word_to_id = read_vocab(vocab_dir)
-    config.vocab_size = len(words)
+    # words, word_to_id = read_vocab(vocab_dir)
+    # config.vocab_size = len(words)
     model = TextCNN(config)
 
     if sys.argv[1] == 'train':

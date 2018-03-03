@@ -9,7 +9,6 @@ import jieba
 import jieba.analyse
 from gensim.models.keyedvectors import KeyedVectors
 
-
 def open_file(filename, mode='r'):
     """
     Commonly used file reader, change this to switch between python2 and python3.
@@ -69,7 +68,7 @@ def read_vocab(vocab_dir):
 
 def read_category():
     """读取分类目录，固定"""
-    # categories = ['体育', '财经', '彩票', '星座', '社会', '股票', '房产', '家居',
+    # categories = ['体育', '财经', '彩票',  '社会', '股票', '房产', '家居',
     #               '教育', '科技', '时尚', '时政', '游戏', '娱乐']
     categories = ['体育', '财经', '房产', '家居',
         '教育', '科技', '时尚', '时政', '游戏', '娱乐']
@@ -84,7 +83,7 @@ def to_words(content, words):
 
 
 # process_file(test_dir, word_to_id, cat_to_id, 'padding', word2vec_dir)
-def process_file(filename, word_to_id, cat_to_id, padding_token, file_to_load=None, max_length=None):
+def process_file(filename, cat_to_id, padding_token, file_to_load=None, max_length=None):
     """将文件转换为id表示"""
     contents, labels = read_file(filename)
 
