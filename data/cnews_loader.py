@@ -28,8 +28,8 @@ def read_file(filename):
                 # contents.append(list(content))
                 labels.append(label)
                 # 把这里替换成分词的
-                temp=jieba.analyse.extract_tags(line, topK=600, withWeight=False, allowPOS=())
-                temp.extend(['padding'] * (600 - len(temp))) if len(temp) < 600 else None
+                temp=jieba.analyse.extract_tags(line, topK=156, withWeight=False, allowPOS=())
+                temp.extend(['padding'] * (156 - len(temp))) if len(temp) < 156 else None
                 contents.append(temp)
 
             except:
