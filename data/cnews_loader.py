@@ -34,6 +34,7 @@ def read_file(filename):
 
             except:
                 pass
+    print(len(labels))
     return contents, labels
 
 def build_vocab(train_dir, vocab_dir, times_dir,vocab_size=5000):
@@ -70,10 +71,10 @@ def read_vocab(vocab_dir):
 
 def read_category():
     """读取分类目录，固定"""
-    categories = ['体育', '财经', '彩票', '社会', '股票', '房产', '家居',
-                  '教育', '科技', '时尚', '时政', '游戏', '娱乐']
-    # categories = ['体育', '财经', '房产', '家居',
-    #     '教育', '科技', '时尚', '时政', '游戏', '娱乐']
+    # categories = ['体育', '财经', '彩票', '社会', '股票', '房产', '家居',
+    #               '教育', '科技', '时尚', '时政', '游戏', '娱乐']
+    categories = ['体育', '财经', '房产', '家居',
+        '教育', '科技', '时尚', '时政', '游戏', '娱乐']
     cat_to_id = dict(zip(categories, range(len(categories))))
 
     return categories, cat_to_id
@@ -114,8 +115,8 @@ def process_file(filename, cat_to_id, padding_token, file_to_load=None, max_leng
 
 def embedding_sentences(sentences, file_to_load = None):
     if file_to_load is not None:
-         w2vModel = KeyedVectors.load_word2vec_format(file_to_load, binary=True)
-        # w2vModel = Word2Vec.load(file_to_load)
+         # w2vModel = KeyedVectors.load_word2vec_format(file_to_load, binary=True)
+        w2vModel = KeyedVectors.load(file_to_load)
 
     all_vectors = []
     embeddingDim = w2vModel.vector_size
@@ -123,7 +124,7 @@ def embedding_sentences(sentences, file_to_load = None):
     for sentence in sentences:
         this_vector = []
         for word in sentence:
-            if word in w2vModel.vocab:
+            if word in w2vModel.wv.vocab:
                  this_vector.append(w2vModel[word])
             else:
                 this_vector.append(embeddingUnknown)
