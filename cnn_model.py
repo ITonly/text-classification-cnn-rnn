@@ -9,7 +9,7 @@ class TCNNConfig(object):
     embedding_dim = 64      # 词向量维度
     # seq_length = 600       # 序列长度
     num_classes = 10        # 类别数
-    num_filters = 300        # 卷积核数目
+    num_filters = 256        # 卷积核数目
     kernel_size = 5         # 卷积核尺寸
     vocab_size = 5000       # 词汇表达小
 
@@ -59,7 +59,9 @@ class TextCNN(object):
             self.fc1 = fc
             fc = tf.contrib.layers.dropout(fc, self.keep_prob)
             self.fc2 = fc
-            fc = tf.nn.relu(fc)
+            # fc = tf.nn.relu(fc)
+            fc = tf.nn.tanh(fc)
+            # fc = tf.nn.sigmoid(fc)
             self.fc3 = fc
 
             # 分类器
