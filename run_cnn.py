@@ -17,8 +17,8 @@ test_dir = os.path.join(base_dir, 'cnews.test.txt')
 val_dir = os.path.join(base_dir, 'cnews.val.txt')
 vocab_dir = os.path.join(base_dir, 'cnews.vocab.txt')
 times_dir = os.path.join(base_dir, 'cnews.times.txt')
-# word2vec_dir =os.path.join(base_dir,'news_12g_baidubaike_20g_novel_90g_embedding_64.bin')
-word2vec_dir =os.path.join(base_dir,'word2vec.model')
+word2vec_dir =os.path.join(base_dir,'news_12g_baidubaike_20g_novel_90g_embedding_64.bin')
+# word2vec_dir =os.path.join(base_dir,'word2vec.model')
 
 save_dir = 'checkpoints/textcnn'
 save_path = os.path.join(save_dir, 'best_validation')   # 最佳验证结果保存路径
