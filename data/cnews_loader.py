@@ -115,8 +115,8 @@ def process_file(filename, cat_to_id, padding_token, file_to_load=None, max_leng
 
 def embedding_sentences(sentences, file_to_load = None):
     if file_to_load is not None:
-         # w2vModel = KeyedVectors.load_word2vec_format(file_to_load, binary=True)
-        w2vModel = KeyedVectors.load(file_to_load)
+         w2vModel = KeyedVectors.load_word2vec_format(file_to_load, binary=True)
+        # w2vModel = KeyedVectors.load(file_to_load)
 
     all_vectors = []
     embeddingDim = w2vModel.vector_size
