@@ -60,8 +60,8 @@ class TextCNN(object):
             fc = tf.contrib.layers.dropout(fc, self.keep_prob)
             self.fc2 = fc
             # fc = tf.nn.relu(fc)
-            fc = tf.nn.tanh(fc)
-            # fc = tf.nn.sigmoid(fc)
+            # fc = tf.nn.tanh(fc)
+            fc = tf.nn.sigmoid(fc)
             self.fc3 = fc
 
             # 分类器
